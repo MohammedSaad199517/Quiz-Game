@@ -34,7 +34,7 @@ fun ConfigurationScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(32.dp))
         TextSelect(text= stringResource(R.string.select_question_category))
         Spacer(modifier = Modifier.height(8.dp))
-        ExposedDropdownMenuBox(options = options)
+        ExposedDropdownMenuBox(options = options,250.dp)
         Spacer(modifier = Modifier.height(32.dp))
         TextSelect(text= stringResource(R.string.select_difficult_level))
         Spacer(modifier = Modifier.height(8.dp))
