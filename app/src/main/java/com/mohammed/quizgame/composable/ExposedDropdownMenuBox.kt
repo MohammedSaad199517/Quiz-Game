@@ -21,7 +21,11 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExposedDropdownMenuBox (options:List<String>,width:Dp=100.dp){
+fun ExposedDropdownMenuBox(
+    options: List<String>,
+    width: Dp = 100.dp
+) {
+
 
     var expandedState by remember { mutableStateOf(false) }
     var selectedOption by remember { mutableStateOf(options[0]) }
@@ -32,7 +36,7 @@ fun ExposedDropdownMenuBox (options:List<String>,width:Dp=100.dp){
     )
     {
         androidx.compose.material3.ExposedDropdownMenuBox(
-           modifier = Modifier.width(width) ,
+            modifier = Modifier.width(width),
             expanded = expandedState,
             onExpandedChange = { expandedState = !expandedState })
         {
@@ -51,7 +55,7 @@ fun ExposedDropdownMenuBox (options:List<String>,width:Dp=100.dp){
                 expanded = expandedState,
                 onDismissRequest = { expandedState = false }
             ) {
-                options.forEach { selectedText ->
+                options?.forEach { selectedText ->
                     DropdownMenuItem(
                         text = { Text(text = selectedText) },
                         onClick = {
@@ -66,7 +70,7 @@ fun ExposedDropdownMenuBox (options:List<String>,width:Dp=100.dp){
 
 @Preview(showSystemUi = true)
 @Composable
-fun PreviewExposedDropdownMenuBox(){
+fun PreviewExposedDropdownMenuBox() {
     val optionsNumbers = listOf("1", "2", "3")
     ExposedDropdownMenuBox(optionsNumbers)
 
