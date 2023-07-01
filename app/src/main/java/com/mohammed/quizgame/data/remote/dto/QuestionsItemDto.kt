@@ -1,9 +1,9 @@
-package com.mohammed.quizgame.data.response
+package com.mohammed.quizgame.data.remote.dto
 
 
 import com.google.gson.annotations.SerializedName
 
-data class QuestionsItem(
+data class QuestionsItemDto(
     @SerializedName("category")
     val category: String? = null,
     @SerializedName("id")
@@ -13,7 +13,7 @@ data class QuestionsItem(
     @SerializedName("incorrectAnswers")
     val incorrectAnswers: List<String?>? = null,
     @SerializedName("question")
-    val question: Question? = null,
+    val question: QuestionDto? = null,
     @SerializedName("tags")
     val tags: List<String?>? = null,
     @SerializedName("type")
@@ -25,4 +25,4 @@ data class QuestionsItem(
     @SerializedName("isNiche")
     val isNiche: Boolean? = null,
 
-)
+    )

@@ -1,9 +1,9 @@
-package com.mohammed.quizgame.data.response
+package com.mohammed.quizgame.data.remote.dto
 
 
 import com.google.gson.annotations.SerializedName
 
-data class Question(
+data class QuestionDto(
     @SerializedName("text")
     val text: String? = null
 )
