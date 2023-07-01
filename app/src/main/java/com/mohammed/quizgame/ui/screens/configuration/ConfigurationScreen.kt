@@ -31,14 +31,12 @@ fun ConfigurationScreen(
     navController: NavController,
     viewModel: ConfigurationViewModel = hiltViewModel()
 ) {
-    val options = listOf("one", "two", "three")
-    val optionsNumbers = listOf("1", "2", "3")
+//    val optionsNumbers = listOf("1", "2", "3", "4", "5")
     val questions by viewModel.uiState.collectAsState()
-    val categories = questions.response?:"no data"
-//    .map { it.category }
 
 
-    Log.i("testScreen", "$categories")
+
+
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -48,23 +46,28 @@ fun ConfigurationScreen(
         TextSelect(text = stringResource(R.string.select_question_category))
 
         Spacer(modifier = Modifier.height(8.dp))
-        ExposedDropdownMenuBox(options = options, 250.dp)
+        ExposedDropdownMenuBox(
+            options = questions.categories,
+            width = 250.dp,
+            viewModel
+        )
 
         Spacer(modifier = Modifier.height(32.dp))
         TextSelect(text = stringResource(R.string.select_difficult_level))
 
         Spacer(modifier = Modifier.height(8.dp))
-        RadioButtons()
+        RadioButtons(viewModel)
 
         Spacer(modifier = Modifier.height(32.dp))
         TextSelect(text = stringResource(R.string.select_question_quantity))
 
-        ExposedDropdownMenuBox(options = optionsNumbers)
+//        ExposedDropdownMenuBox(options = optionsNumbers)
         Spacer(modifier = Modifier.height(32.dp))
         Button(
 
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            onClick = { },
+            onClick = {
+            },
 
             ) {
             Text(text = "Start")
