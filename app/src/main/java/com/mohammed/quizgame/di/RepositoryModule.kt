@@ -1,8 +1,9 @@
 package com.mohammed.quizgame.di
 
+import com.mohammed.quizgame.data.local.QuizGameDao
 import com.mohammed.quizgame.data.repository.QuizGameRepository
 import com.mohammed.quizgame.data.repository.QuizGameRepositoryImp
-import com.mohammed.quizgame.data.service.ApiService
+import com.mohammed.quizgame.data.remote.sevice.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,9 +16,11 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideQuizGameRepository(apiService: ApiService):QuizGameRepository =
-        QuizGameRepositoryImp(apiService)
-
+    fun provideQuizGameRepository(
+        apiService: ApiService,
+        dao: QuizGameDao
+    ): QuizGameRepository =
+        QuizGameRepositoryImp(apiService, dao)
 
 
 }
