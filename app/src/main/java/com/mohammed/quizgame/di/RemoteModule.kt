@@ -1,7 +1,7 @@
 package com.mohammed.quizgame.di
 
 import com.mohammed.quizgame.data.Constants
-import com.mohammed.quizgame.data.service.ApiService
+import com.mohammed.quizgame.data.remote.sevice.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,7 +15,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule {
+object RemoteModule {
     @Singleton
     @Provides
     fun provideQuizApiService(retrofit: Retrofit): ApiService {
