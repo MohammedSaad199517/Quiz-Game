@@ -1,9 +1,13 @@
 package com.mohammed.quizgame.data.repository
 
-import com.mohammed.quizgame.domain.models.Configuration
+import com.mohammed.quizgame.data.local.QuizGameEntity
 
 
 interface QuizGameRepository{
-    suspend fun getAllQuestions():Result<List<Configuration>>
+
+
+    suspend fun getAllCachedQuestions(): List<QuizGameEntity>
+
+    suspend fun fetchQuizAndCache(): Result<List<QuizGameEntity>>
 
 }
