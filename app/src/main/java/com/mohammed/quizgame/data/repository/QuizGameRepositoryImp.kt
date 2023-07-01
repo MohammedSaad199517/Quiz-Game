@@ -23,7 +23,8 @@ class QuizGameRepositoryImp @Inject constructor(
             if (response.isSuccessful) {
                 val items = response.body()?.map { it.toQuizGameEntity() }
                 items?.let {
-                    return Result.success(items)
+                    dao.insertAllQuestions(it)
+                    return Result.success(it)
                 }
 
             }
