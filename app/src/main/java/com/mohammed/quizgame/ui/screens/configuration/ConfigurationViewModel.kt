@@ -2,7 +2,8 @@ package com.mohammed.quizgame.ui.screens.configuration
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mohammed.quizgame.domain.usecase.GetAllQuestionsUseCase
+import com.mohammed.quizgame.domain.usecase.CacheQuizUseCase
+import com.mohammed.quizgame.domain.usecase.GetAllCategoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,20 +14,39 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ConfigurationViewModel @Inject constructor(
-    private val getAllQuestionsUseCase: GetAllQuestionsUseCase
+    private val getAllCategoryUseCase: GetAllCategoryUseCase,
+    private val cacheQuizUseCase: CacheQuizUseCase
 ) :ViewModel() {
     private val _uiState = MutableStateFlow(ConfigurationUISate())
     val uiState:StateFlow<ConfigurationUISate> =_uiState
+
+
     init {
+
+
         viewModelScope.launch(Dispatchers.IO) {
+            cacheQuizUseCase.invoke()
+            getAllQuestions()
+        }
+    }
+    suspend fun getAllQuestions(){
+
             _uiState.update {
                 it.copy(
                     isLoading = false,
-                    response = getAllQuestionsUseCase.invoke()
+                    categories = getAllCategoryUseCase.invoke()
+
                 )
             }
-        }
+
     }
-
-
+    fun updateSelectedCategory(value: String) {
+        _uiState.update { it.copy(selectedCategory = value) }
+    }
+    fun updateSelectedLevel(value: String) {
+       _uiState.update { it.copy(selectedLevel = value) }
+    }
+    fun updateSelectedQuantity(value: Int) {
+        _uiState.update { it.copy(selectedQuantity = value) }
+    }
 }
