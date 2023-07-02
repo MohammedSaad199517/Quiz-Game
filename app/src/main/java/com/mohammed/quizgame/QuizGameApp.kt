@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.mohammed.quizgame.ui.screens.configuration.ConfigurationScreen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,7 +23,7 @@ fun QuizGameApp (){
                 .fillMaxSize()
                 .padding(it), contentAlignment = Alignment.Center
         ) {
-            ConfigurationScreen(navController = navController)
+            QuizGameNavGraph(navController = navController)
 
 
         }
