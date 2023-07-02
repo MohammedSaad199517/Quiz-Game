@@ -1,16 +1,17 @@
-package com.mohammed.quizgame.data.repository
+package com.mohammed.quizgame.data.repository.quiz
 
-import com.mohammed.quizgame.data.local.QuizGameDao
-import com.mohammed.quizgame.data.local.QuizGameEntity
-import com.mohammed.quizgame.data.remote.sevice.ApiService
+import com.mohammed.quizgame.data.local.database.QuizGameDao
+import com.mohammed.quizgame.data.local.database.QuizGameEntity
+import com.mohammed.quizgame.data.remote.ApiService
 import com.mohammed.quizgame.utils.toQuizGameEntity
 import javax.inject.Inject
 
 
-class QuizGameRepositoryImp @Inject constructor(
+class QuizRepositoryImp @Inject constructor(
     private val apiService: ApiService,
-    private val dao: QuizGameDao
-) : QuizGameRepository {
+    private val dao: QuizGameDao,
+
+    ) : QuizRepository {
 
 
     override suspend fun getAllCachedQuestions(): List<QuizGameEntity> {
@@ -33,6 +34,5 @@ class QuizGameRepositoryImp @Inject constructor(
             return Result.failure(e)
         }
     }
-
 
 }
