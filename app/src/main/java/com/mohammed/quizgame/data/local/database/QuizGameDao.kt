@@ -1,4 +1,4 @@
-package com.mohammed.quizgame.data.local
+package com.mohammed.quizgame.data.local.database
 
 import androidx.room.Dao
 import androidx.room.Insert
