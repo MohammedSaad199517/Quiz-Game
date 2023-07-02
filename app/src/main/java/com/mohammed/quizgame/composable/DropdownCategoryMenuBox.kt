@@ -17,15 +17,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.mohammed.quizgame.ui.screens.configuration.ConfigurationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExposedDropdownMenuBox(
+fun DropdownCategoryMenuBox(
     options: List<String>,
-    width: Dp = 100.dp,
     viewModel: ConfigurationViewModel
 
 ) {
@@ -43,9 +41,10 @@ fun ExposedDropdownMenuBox(
         )
         {
             ExposedDropdownMenuBox(
-                modifier = Modifier.width(width),
+                modifier = Modifier.width(250.dp),
                 expanded = expandedState,
-                onExpandedChange = { expandedState = !expandedState })
+                onExpandedChange = { expandedState = !expandedState }
+            )
             {
                 TextField(
                     value = selectedOption,
@@ -63,7 +62,7 @@ fun ExposedDropdownMenuBox(
                     onDismissRequest = { expandedState = false }
                 ) {
 
-                    options?.forEach { selectedText ->
+                    options.forEach { selectedText ->
                         DropdownMenuItem(
                             text = { Text(text = selectedText) },
                             onClick = {
