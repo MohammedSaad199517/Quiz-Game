@@ -1,12 +1,16 @@
 package com.mohammed.quizgame.di
 
-import com.mohammed.quizgame.data.local.QuizGameDao
-import com.mohammed.quizgame.data.repository.QuizGameRepository
-import com.mohammed.quizgame.data.repository.QuizGameRepositoryImp
-import com.mohammed.quizgame.data.remote.sevice.ApiService
+import android.content.Context
+import com.mohammed.quizgame.data.local.database.QuizGameDao
+import com.mohammed.quizgame.data.remote.ApiService
+import com.mohammed.quizgame.data.repository.configuration.ConfigurationRepository
+import com.mohammed.quizgame.data.repository.configuration.ConfigurationRepositoryImp
+import com.mohammed.quizgame.data.repository.quiz.QuizRepository
+import com.mohammed.quizgame.data.repository.quiz.QuizRepositoryImp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -16,11 +20,18 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideQuizGameRepository(
+    fun provideQuizRepository(
         apiService: ApiService,
-        dao: QuizGameDao
-    ): QuizGameRepository =
-        QuizGameRepositoryImp(apiService, dao)
+        dao: QuizGameDao,
+    ): QuizRepository =
+        QuizRepositoryImp(apiService, dao)
+
+    @Singleton
+    @Provides
+    fun provideConfigurationRepository(
+        @ApplicationContext context: Context
+
+    ) :ConfigurationRepository= ConfigurationRepositoryImp(context)
 
 
 }
