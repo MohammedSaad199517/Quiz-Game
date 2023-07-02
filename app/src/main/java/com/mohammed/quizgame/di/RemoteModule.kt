@@ -1,7 +1,7 @@
 package com.mohammed.quizgame.di
 
 import com.mohammed.quizgame.data.Constants
-import com.mohammed.quizgame.data.remote.sevice.ApiService
+import com.mohammed.quizgame.data.remote.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

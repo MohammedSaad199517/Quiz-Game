@@ -3,8 +3,8 @@ package com.mohammed.quizgame.di
 import android.content.Context
 import androidx.room.Room
 import com.mohammed.quizgame.data.Constants
-import com.mohammed.quizgame.data.local.QuizGameDao
-import com.mohammed.quizgame.data.local.QuizGameDatabase
+import com.mohammed.quizgame.data.local.database.QuizGameDao
+import com.mohammed.quizgame.data.local.database.QuizGameDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
