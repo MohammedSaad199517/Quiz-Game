@@ -1,4 +1,4 @@
-package com.mohammed.quizgame.data.remote.sevice
+package com.mohammed.quizgame.data.remote
 
 import com.mohammed.quizgame.data.remote.dto.QuestionsDto
 import retrofit2.Response
