@@ -1,7 +1,6 @@
 package com.mohammed.quizgame.ui.screens.configuration
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,16 +13,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.mohammed.quizgame.R
-import com.mohammed.quizgame.composable.ExposedDropdownMenuBox
+import com.mohammed.quizgame.Screen
+import com.mohammed.quizgame.composable.DropdownCategoryMenuBox
+import com.mohammed.quizgame.composable.DropdownQuestionQuantityMenu
 import com.mohammed.quizgame.composable.RadioButtons
 import com.mohammed.quizgame.composable.TextSelect
-
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -31,8 +29,8 @@ fun ConfigurationScreen(
     navController: NavController,
     viewModel: ConfigurationViewModel = hiltViewModel()
 ) {
-//    val optionsNumbers = listOf("1", "2", "3", "4", "5")
-    val questions by viewModel.uiState.collectAsState()
+    val optionsNumbers = listOf(1, 2, 3, 4, 5)
+    val uiState by viewModel.uiState.collectAsState()
 
 
 
@@ -46,9 +44,8 @@ fun ConfigurationScreen(
         TextSelect(text = stringResource(R.string.select_question_category))
 
         Spacer(modifier = Modifier.height(8.dp))
-        ExposedDropdownMenuBox(
-            options = questions.categories,
-            width = 250.dp,
+        DropdownCategoryMenuBox(
+            options = uiState.categories,
             viewModel
         )
 
@@ -61,12 +58,24 @@ fun ConfigurationScreen(
         Spacer(modifier = Modifier.height(32.dp))
         TextSelect(text = stringResource(R.string.select_question_quantity))
 
-//        ExposedDropdownMenuBox(options = optionsNumbers)
+        DropdownQuestionQuantityMenu(
+            options = optionsNumbers,
+            viewModel = viewModel
+        )
         Spacer(modifier = Modifier.height(32.dp))
         Button(
 
             modifier = Modifier.align(Alignment.CenterHorizontally),
             onClick = {
+
+                viewModel.saveConfig(
+                    uiState.selectedCategory,
+                    uiState.selectedLevel,
+                    uiState.selectedQuantity
+                )
+
+                navController.navigate(Screen.GameScreen.route)
+
             },
 
             ) {
@@ -75,12 +84,6 @@ fun ConfigurationScreen(
     }
 }
 
-@Composable
-@Preview(showSystemUi = true)
-fun PreviewConfigurationScreen() {
-    val navController = rememberNavController()
-    ConfigurationScreen(
-        navController
 
-    )
-}
+
+
