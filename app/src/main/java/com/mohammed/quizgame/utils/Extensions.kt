@@ -1,8 +1,8 @@
 package com.mohammed.quizgame.utils
 
-import com.mohammed.quizgame.data.local.QuizGameEntity
+import com.mohammed.quizgame.data.local.database.QuizGameEntity
 import com.mohammed.quizgame.data.remote.dto.QuestionsItemDto
-import com.mohammed.quizgame.domain.models.Configuration
+import com.mohammed.quizgame.domain.models.Game
 
 fun QuestionsItemDto.toQuizGameEntity(): QuizGameEntity {
 
@@ -17,9 +17,16 @@ fun QuestionsItemDto.toQuizGameEntity(): QuizGameEntity {
         question = question?.text!!
     )
 }
+fun QuizGameEntity.toGame(): Game {
 
-fun QuizGameEntity.toConfiguration(): Configuration {
-    return Configuration(
-        category = category
+    return Game(
+        questionId = questionId,
+        category = category,
+        correctAnswer = correctAnswer,
+        firstIncorrectAnswers = firstIncorrectAnswers,
+        secondIncorrectAnswers = secondIncorrectAnswers,
+        thirdIncorrectAnswers = thirdIncorrectAnswers,
+        difficulty = difficulty,
+        question = question
     )
 }
