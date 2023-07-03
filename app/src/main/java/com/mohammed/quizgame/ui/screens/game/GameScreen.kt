@@ -1,14 +1,11 @@
 package com.mohammed.quizgame.ui.screens.game
 
-import android.os.CountDownTimer
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -31,15 +28,12 @@ fun GameScreen(
 ) {
     val quiz by viewModel.uiState.collectAsState()
 
-    Column(
-        modifier = Modifier.fillMaxSize()
+    Column(modifier = Modifier.fillMaxSize())
+    {
 
-    ) {
+        CurrentScore()
 
-        CurrentQuestion("sklfslkdfs")
-
-        Spacer(modifier = Modifier.size(16.dp))
-
+        CurrentQuestion(question = quiz.question, quiz.currentQuestion.toString())
 
         Row(
             modifier = Modifier
@@ -49,46 +43,17 @@ fun GameScreen(
             verticalAlignment = Alignment.CenterVertically
 
         ) {
-            CurrentQuestionNumber(2, 5)
+            CurrentQuestionNumber(quiz.currentQuestion, quiz.totalQuestions)
             Timer(quiz.time.toString())
 
         }
 
-
-        AnswerOption("one")
-        AnswerOption("two")
-        AnswerOption("three")
-        AnswerOption("four")
-        Spacer(modifier = Modifier.size(16.dp))
-        CurrentScore()
-
-        // Start the countdown timer when the component is first composed
-        LaunchedEffect(Unit) {
-            val countdownTimer = object : CountDownTimer(60000, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                    val secondsRemaining = (millisUntilFinished / 1000).toInt()
-                    viewModel.updateTimerValue(secondsRemaining)
-                }
-
-                override fun onFinish() {
-                    viewModel.updateTimerValue(0)
-                }
-            }
-            countdownTimer.start()
-
+        quiz.answers.forEach {
+            AnswerOption(it.values.first())
 
         }
-
-
+        LaunchedEffect(quiz.currentQuestion) {
+            viewModel.startTimer()
+        }
     }
-
 }
-
-//@Composable
-//@Preview(showSystemUi = true)
-//fun previewGameScreen() {
-//    val navController = rememberNavController()
-//
-//
-//    GameScreen(navController)
-//}
