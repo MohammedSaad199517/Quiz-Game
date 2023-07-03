@@ -31,7 +31,7 @@ fun GameScreen(
     Column(modifier = Modifier.fillMaxSize())
     {
 
-        CurrentScore()
+        CurrentScore(quiz.currentScore)
 
         CurrentQuestion(question = quiz.question, quiz.currentQuestionNumber.toString())
 
