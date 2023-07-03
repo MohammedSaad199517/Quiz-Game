@@ -2,8 +2,11 @@ package com.mohammed.quizgame.ui.screens.configuration
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
+import com.mohammed.quizgame.Screen
 import com.mohammed.quizgame.domain.usecase.CacheQuizUseCase
 import com.mohammed.quizgame.domain.usecase.GetAllCategoryUseCase
+import com.mohammed.quizgame.domain.usecase.GetQuizUseCase
 import com.mohammed.quizgame.domain.usecase.SaveConfigurationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,14 +21,13 @@ class ConfigurationViewModel @Inject constructor(
     private val getAllCategoryUseCase: GetAllCategoryUseCase,
     private val cacheQuizUseCase: CacheQuizUseCase,
     private val saveConfigurationUseCase: SaveConfigurationUseCase,
+    private val getQuizUseCase: GetQuizUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ConfigurationUISate())
     val uiState: StateFlow<ConfigurationUISate> = _uiState
 
 
     init {
-
-
         viewModelScope.launch(Dispatchers.IO) {
             cacheQuizUseCase.invoke()
             getAllQuestions()
@@ -33,7 +35,6 @@ class ConfigurationViewModel @Inject constructor(
     }
 
     suspend fun getAllQuestions() {
-
         _uiState.update {
             it.copy(
                 isLoading = false,
@@ -41,7 +42,6 @@ class ConfigurationViewModel @Inject constructor(
 
             )
         }
-
     }
 
     fun updateSelectedCategory(value: String) {
@@ -56,6 +56,16 @@ class ConfigurationViewModel @Inject constructor(
         _uiState.update { it.copy(selectedQuantity = value) }
     }
 
+    fun chickIfNumberOfQuestionIsAvailable() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.update {
+                it.copy(
+                    isNumberOfQuestionAvailable = getQuizUseCase.invoke().size <= uiState.value.selectedQuantity
+                )
+            }
+        }
+    }
+
     fun saveConfig(
         selectedCategory: String,
         selectedLevel: String,
@@ -68,9 +78,15 @@ class ConfigurationViewModel @Inject constructor(
                 selectedQuantity
             )
         }
-
     }
 
-
-
+    fun navigateToGameScreen(navController: NavController) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (getQuizUseCase.invoke().size >= uiState.value.selectedQuantity) {
+                viewModelScope.launch {
+                    navController.navigate(Screen.GameScreen.route)
+                }
+            }
+        }
+    }
 }
