@@ -7,5 +7,6 @@ sealed class Screen(
     object ConfigurationScreen : Screen(route = "ConfigurationScreen")
 
     object GameScreen : Screen(route = "GameScreen")
+    object WinnerScreen : Screen(route = "WinnerScreen")
 
 }
