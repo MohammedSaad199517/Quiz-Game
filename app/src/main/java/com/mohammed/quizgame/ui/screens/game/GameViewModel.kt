@@ -1,10 +1,12 @@
 package com.mohammed.quizgame.ui.screens.game
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mohammed.quizgame.domain.usecase.CountdownTimerUseCase
 import com.mohammed.quizgame.domain.usecase.GetQuizUseCase
 import com.mohammed.quizgame.domain.usecase.GetSavedConfigurationUseCase
+import com.mohammed.quizgame.ui.theme.White87
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,11 +58,11 @@ class GameViewModel @Inject constructor(
             },
             onFinish = {
                 viewModelScope.launch(Dispatchers.IO) {
-                    val currentQuestion = _uiState.value.currentQuestion
+                    val currentQuestion = _uiState.value.currentQuestionNumber
                     if (currentQuestion < getSavedConfigurationUseCase.invoke()?.selectedQuantity!!) {
                         _uiState.update {
                             it.copy(
-                                currentQuestion = currentQuestion + 1,
+                                currentQuestionNumber = currentQuestion + 1,
                                 question = getQuizUseCase.invoke().get(currentQuestion).question,
                                 answers = getQuizUseCase.invoke().get(currentQuestion).answers
 
@@ -78,6 +80,24 @@ class GameViewModel @Inject constructor(
     fun stopTimer() {
         countdownTimerUseCase.stopTimer()
     }
+
+    fun backgroundAnswerOptionButton( id: Int): Color {
+        val isCorrectAnswer =_uiState.value.isAnswerCorrect
+        if (isCorrectAnswer != null && id == _uiState.value.answerSelectedId) {
+           return when (isCorrectAnswer) {
+                false -> Color.Red
+                true -> Color.Green
+            }
+        }
+        return White87
+    }
+
+    fun getAnswerSelectedId(id:Int){
+        _uiState.update { it.copy(answerSelectedId = id) }
+    }
+
+    fun isCorrectAnswer(answerStatus: String) =
+        _uiState.update { it.copy(isAnswerCorrect = answerStatus == "correctAnswer") }
 
     private companion object {
         const val totalTime = 5000L
