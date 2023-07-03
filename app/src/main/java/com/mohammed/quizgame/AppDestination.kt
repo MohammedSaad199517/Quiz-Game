@@ -8,5 +8,6 @@ sealed class Screen(
 
     object GameScreen : Screen(route = "GameScreen")
     object WinnerScreen : Screen(route = "WinnerScreen")
+    object SplashScreen : Screen(route = "SplashScreen")
 
 }
