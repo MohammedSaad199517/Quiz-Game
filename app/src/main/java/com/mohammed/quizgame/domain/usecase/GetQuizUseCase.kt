@@ -16,6 +16,6 @@ class GetQuizUseCase @Inject constructor(
             .map { it.toGame() }
             .filter {
                 it.difficulty == levelSelected && it.category == categorySelected
-            }
+            }.shuffled()
     }
 }
