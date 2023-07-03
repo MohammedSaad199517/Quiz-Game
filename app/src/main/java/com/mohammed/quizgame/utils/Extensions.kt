@@ -22,10 +22,12 @@ fun QuizGameEntity.toGame(): Game {
     return Game(
         questionId = questionId,
         category = category,
-        correctAnswer = correctAnswer,
-        firstIncorrectAnswers = firstIncorrectAnswers,
-        secondIncorrectAnswers = secondIncorrectAnswers,
-        thirdIncorrectAnswers = thirdIncorrectAnswers,
+       answers = listOf(
+           hashMapOf("correctAnswer" to correctAnswer),
+           hashMapOf("firstIncorrectAnswers" to firstIncorrectAnswers),
+           hashMapOf("secondIncorrectAnswers" to secondIncorrectAnswers),
+           hashMapOf("thirdIncorrectAnswers" to thirdIncorrectAnswers)
+       ).shuffled(),
         difficulty = difficulty,
         question = question
     )
