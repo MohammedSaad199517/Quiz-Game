@@ -33,7 +33,7 @@ fun GameScreen(
 
         CurrentScore()
 
-        CurrentQuestion(question = quiz.question, quiz.currentQuestion.toString())
+        CurrentQuestion(question = quiz.question, quiz.currentQuestionNumber.toString())
 
         Row(
             modifier = Modifier
@@ -41,18 +41,22 @@ fun GameScreen(
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
-
         ) {
-            CurrentQuestionNumber(quiz.currentQuestion, quiz.totalQuestions)
+            CurrentQuestionNumber(quiz.currentQuestionNumber, quiz.totalQuestions)
             Timer(quiz.time.toString())
 
         }
 
         quiz.answers.forEach {
-            AnswerOption(it.values.first())
+            val id = quiz.answers.indexOf(it)
+            AnswerOption(
+                answer = it,
+                viewModel = viewModel,
+                answerId = id
+            )
 
         }
-        LaunchedEffect(quiz.currentQuestion) {
+        LaunchedEffect(quiz.currentQuestionNumber) {
             viewModel.startTimer()
         }
     }
