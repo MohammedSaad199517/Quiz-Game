@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import com.mohammed.quizgame.ui.theme.mainColor
+import com.mohammed.quizgame.ui.theme.MainColor
 
 @Composable
 fun TextSelect(text:String) {
@@ -16,7 +16,7 @@ fun TextSelect(text:String) {
             .fillMaxWidth(),
         textAlign = TextAlign.Center,
         fontSize = 18.sp,
-        color = mainColor
+        color = MainColor
 
     )
 }

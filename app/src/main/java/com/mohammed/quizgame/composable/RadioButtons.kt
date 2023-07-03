@@ -14,7 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mohammed.quizgame.ui.screens.configuration.ConfigurationViewModel
-import com.mohammed.quizgame.ui.theme.mainColor
+import com.mohammed.quizgame.ui.theme.MainColor
 
 object Level {
     const val EASY = "Easy"
@@ -34,7 +34,7 @@ fun Option(
             selectLevel.value = level
             viewModel.updateSelectedLevel(selectLevel.value)
         },
-        colors = RadioButtonDefaults.colors(mainColor),
+        colors = RadioButtonDefaults.colors(MainColor),
 
         )
     Text(text = level, modifier = Modifier.padding(0.dp, 14.dp))
