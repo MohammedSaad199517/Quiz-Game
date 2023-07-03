@@ -18,7 +18,7 @@ import com.mohammed.quizgame.ui.theme.White87
 
 
 @Composable
-fun CurrentScore() {
+fun CurrentScore(currentScore:Int) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(MainColor),
@@ -29,7 +29,7 @@ fun CurrentScore() {
                 .padding(16.dp)
                 .background(Gold87, RoundedCornerShape(16.dp))
                 .padding(8.dp),
-            text = "Score : 2",
+            text = "Score : $currentScore",
             color = White87,
             fontSize = 16.sp
         )
