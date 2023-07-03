@@ -64,7 +64,9 @@ class GameViewModel @Inject constructor(
                             it.copy(
                                 currentQuestionNumber = currentQuestion + 1,
                                 question = getQuizUseCase.invoke().get(currentQuestion).question,
-                                answers = getQuizUseCase.invoke().get(currentQuestion).answers
+                                answers = getQuizUseCase.invoke().get(currentQuestion).answers,
+                                isAnswerCorrect = null,
+                                answerSelectedId = null
 
                             )
                         }
@@ -81,10 +83,10 @@ class GameViewModel @Inject constructor(
         countdownTimerUseCase.stopTimer()
     }
 
-    fun backgroundAnswerOptionButton( id: Int): Color {
-        val isCorrectAnswer =_uiState.value.isAnswerCorrect
+    fun backgroundAnswerOptionButton(id: Int): Color {
+        val isCorrectAnswer = _uiState.value.isAnswerCorrect
         if (isCorrectAnswer != null && id == _uiState.value.answerSelectedId) {
-           return when (isCorrectAnswer) {
+            return when (isCorrectAnswer) {
                 false -> Color.Red
                 true -> Color.Green
             }
@@ -92,12 +94,29 @@ class GameViewModel @Inject constructor(
         return White87
     }
 
-    fun getAnswerSelectedId(id:Int){
+    fun getAnswerSelectedId(id: Int) {
         _uiState.update { it.copy(answerSelectedId = id) }
     }
 
-    fun isCorrectAnswer(answerStatus: String) =
+    fun isCorrectAnswer(answerStatus: String) {
         _uiState.update { it.copy(isAnswerCorrect = answerStatus == "correctAnswer") }
+
+    }
+
+    fun updateScore() {
+
+        val isAnswerCorrect = _uiState.value.isAnswerCorrect
+        isAnswerCorrect?.apply {
+
+            var currentScore = _uiState.value.currentScore
+
+            if (isAnswerCorrect) _uiState.update {
+                currentScore++
+                it.copy(currentScore = currentScore)
+            }
+        }
+
+    }
 
     private companion object {
         const val totalTime = 5000L
