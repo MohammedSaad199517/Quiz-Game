@@ -74,6 +74,8 @@ fun DropdownCategoryMenuBox(
                 }
             }
         }
+    }else{
+        ProgressBar()
     }
 
 }
