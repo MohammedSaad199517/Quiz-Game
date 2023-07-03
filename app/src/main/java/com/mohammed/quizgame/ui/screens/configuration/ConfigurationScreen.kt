@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.mohammed.quizgame.R
-import com.mohammed.quizgame.Screen
+import com.mohammed.quizgame.composable.AlertDialog
 import com.mohammed.quizgame.composable.DropdownCategoryMenuBox
 import com.mohammed.quizgame.composable.DropdownQuestionQuantityMenu
 import com.mohammed.quizgame.composable.RadioButtons
@@ -29,7 +29,7 @@ fun ConfigurationScreen(
     navController: NavController,
     viewModel: ConfigurationViewModel = hiltViewModel()
 ) {
-    val optionsNumbers = listOf(1, 2, 3, 4, 5)
+
     val uiState by viewModel.uiState.collectAsState()
 
 
@@ -58,10 +58,7 @@ fun ConfigurationScreen(
         Spacer(modifier = Modifier.height(32.dp))
         TextSelect(text = stringResource(R.string.select_question_quantity))
 
-        DropdownQuestionQuantityMenu(
-            options = optionsNumbers,
-            viewModel = viewModel
-        )
+        DropdownQuestionQuantityMenu(viewModel = viewModel)
         Spacer(modifier = Modifier.height(32.dp))
         Button(
 
@@ -74,13 +71,17 @@ fun ConfigurationScreen(
                     uiState.selectedQuantity
                 )
 
-                navController.navigate(Screen.GameScreen.route)
-
+                viewModel.chickIfNumberOfQuestionIsAvailable()
+                viewModel.navigateToGameScreen(navController)
             },
-
             ) {
             Text(text = "Start")
         }
+
+        AlertDialog(
+            uiState.isNumberOfQuestionAvailable,
+            navController
+        )
     }
 }
 
