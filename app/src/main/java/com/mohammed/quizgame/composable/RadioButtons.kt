@@ -17,9 +17,9 @@ import com.mohammed.quizgame.ui.screens.configuration.ConfigurationViewModel
 import com.mohammed.quizgame.ui.theme.MainColor
 
 object Level {
-    const val EASY = "Easy"
-    const val MEDIUM = "Medium"
-    const val HARD = "Hard"
+    const val EASY = "easy"
+    const val MEDIUM = "medium"
+    const val HARD = "hard"
 }
 
 @Composable
