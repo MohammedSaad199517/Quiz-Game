@@ -32,6 +32,7 @@ fun AnswerOption(
         onClick = {
             viewModel.isCorrectAnswer(answer.keys.first())
             viewModel.getAnswerSelectedId(answerId)
+            viewModel.updateScore()
         },
         colors = ButtonDefaults.buttonColors(
 
