@@ -9,7 +9,6 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,57 +21,49 @@ import com.mohammed.quizgame.ui.screens.configuration.ConfigurationViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DropdownQuestionQuantityMenu(
-    options: List<Int>,
     viewModel: ConfigurationViewModel
-
 ) {
-    val isLoading by viewModel.uiState.collectAsState()
+    var expandedState by remember { mutableStateOf(false) }
+    var selectedOption by remember { mutableStateOf(5) }
 
-    if (!isLoading.isLoading) {
-        var expandedState by remember { mutableStateOf(false) }
-        var selectedOption by remember { mutableStateOf(options[0]) }
+    Box(
+        modifier = Modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center
 
-
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-
+    )
+    {
+        androidx.compose.material3.ExposedDropdownMenuBox(
+            modifier = Modifier.width(100.dp),
+            expanded = expandedState,
+            onExpandedChange = { expandedState = !expandedState }
         )
         {
-            androidx.compose.material3.ExposedDropdownMenuBox(
-                modifier = Modifier.width(100.dp),
-                expanded = expandedState,
-                onExpandedChange = { expandedState = !expandedState }
+            TextField(
+                value = selectedOption.toString(),
+                onValueChange = {},
+                readOnly = true,
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedState)
+                },
+                colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                modifier = Modifier.menuAnchor()
             )
-            {
-                TextField(
-                    value = selectedOption.toString(),
-                    onValueChange = {},
-                    readOnly = true,
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedState)
-                    },
-                    colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                    modifier = Modifier.menuAnchor()
-                )
 
-                ExposedDropdownMenu(
-                    expanded = expandedState,
-                    onDismissRequest = { expandedState = false }
-                ) {
-
-                    options?.forEach { selectedText ->
-                        DropdownMenuItem(
-                            text = { Text(text = selectedText.toString()) },
-                            onClick = {
-                                selectedOption = selectedText
-                                expandedState = false
-                                viewModel.updateSelectedQuantity(selectedText)
-                            })
-                    }
+            ExposedDropdownMenu(
+                expanded = expandedState,
+                onDismissRequest = { expandedState = false }
+            ) {
+                for (questionQuantity in 1..20) {
+                    DropdownMenuItem(
+                        text = { Text(text = questionQuantity.toString()) },
+                        onClick = {
+                            selectedOption = questionQuantity
+                            expandedState = false
+                            viewModel.updateSelectedQuantity(questionQuantity)
+                        })
                 }
+
             }
         }
     }
-
 }
