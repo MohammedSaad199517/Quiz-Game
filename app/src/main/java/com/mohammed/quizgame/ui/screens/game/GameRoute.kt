@@ -6,6 +6,6 @@ import androidx.navigation.compose.composable
 import com.mohammed.quizgame.Screen
 
 
-fun NavGraphBuilder.gameRoute(navController: NavController){
+fun NavGraphBuilder.gameRoute(navController: NavController) {
     composable(Screen.GameScreen.route) { GameScreen(navController) }
 }

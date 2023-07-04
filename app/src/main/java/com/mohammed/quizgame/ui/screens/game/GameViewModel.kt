@@ -81,7 +81,7 @@ class GameViewModel @Inject constructor(
 
     private fun navigateToWinnerScreen(navController: NavController) {
         viewModelScope.launch {
-            navController.navigate(Screen.WinnerScreen.route)
+            navController.navigate("${Screen.WinnerScreen.route}/${_uiState.value.currentScore}")
 
         }
     }
