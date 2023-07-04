@@ -20,13 +20,10 @@ class GameViewModel @Inject constructor(
     private val getQuizUseCase: GetQuizUseCase,
     private val getSavedConfigurationUseCase: GetSavedConfigurationUseCase,
     private val countdownTimerUseCase: CountdownTimerUseCase
-
-
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(GameUISate())
     val uiState: StateFlow<GameUISate> = _uiState
-
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -34,14 +31,10 @@ class GameViewModel @Inject constructor(
                 it.copy(
                     totalQuestions = getSavedConfigurationUseCase.invoke()?.selectedQuantity!!,
                     question = getQuizUseCase.invoke().get(0).question,
-                    answers = getQuizUseCase.invoke().get(0).answers
+                    answers = getQuizUseCase.invoke().get(0).answers,
                 )
-
             }
-
         }
-
-
     }
 
     fun startTimer() {
@@ -66,13 +59,11 @@ class GameViewModel @Inject constructor(
                                 question = getQuizUseCase.invoke().get(currentQuestion).question,
                                 answers = getQuizUseCase.invoke().get(currentQuestion).answers,
                                 isAnswerCorrect = null,
-                                answerSelectedId = null
-
+                                answerSelectedId = null,
+                                isAnswerSelected = false
                             )
                         }
-
                     }
-
                 }
             },
             interval = interval
@@ -100,22 +91,31 @@ class GameViewModel @Inject constructor(
 
     fun isCorrectAnswer(answerStatus: String) {
         _uiState.update { it.copy(isAnswerCorrect = answerStatus == "correctAnswer") }
+    }
 
+    fun disableButtonWhenAnswerIsSelected(id: Int): Boolean {
+        if (_uiState.value.isAnswerSelected) {
+            if (id == _uiState.value.answerSelectedId) {
+                return true
+            }
+            return false
+        }
+        return true
     }
 
     fun updateScore() {
-
         val isAnswerCorrect = _uiState.value.isAnswerCorrect
         isAnswerCorrect?.apply {
-
             var currentScore = _uiState.value.currentScore
-
             if (isAnswerCorrect) _uiState.update {
                 currentScore++
                 it.copy(currentScore = currentScore)
             }
         }
+    }
 
+    fun checkIfAnswerIsSelected() {
+        _uiState.update { it.copy(isAnswerSelected = true) }
     }
 
     private companion object {
