@@ -3,6 +3,8 @@ package com.mohammed.quizgame.ui.screens.game
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
+import com.mohammed.quizgame.Screen
 import com.mohammed.quizgame.domain.usecase.CountdownTimerUseCase
 import com.mohammed.quizgame.domain.usecase.GetQuizUseCase
 import com.mohammed.quizgame.domain.usecase.GetSavedConfigurationUseCase
@@ -37,7 +39,7 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    fun startTimer() {
+    fun startTimer(navController: NavController) {
         countdownTimerUseCase.startTimer(
             totalTime = totalTime,
             onTick = { secondsRemaining ->
@@ -63,7 +65,10 @@ class GameViewModel @Inject constructor(
                                 isAnswerSelected = false
                             )
                         }
+                    } else {
+                        navigateToWinnerScreen(navController)
                     }
+
                 }
             },
             interval = interval
@@ -72,6 +77,13 @@ class GameViewModel @Inject constructor(
 
     fun stopTimer() {
         countdownTimerUseCase.stopTimer()
+    }
+
+    private fun navigateToWinnerScreen(navController: NavController) {
+        viewModelScope.launch {
+            navController.navigate(Screen.WinnerScreen.route)
+
+        }
     }
 
     fun backgroundAnswerOptionButton(id: Int): Color {

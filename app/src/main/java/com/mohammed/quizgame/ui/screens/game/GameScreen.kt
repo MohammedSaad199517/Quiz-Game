@@ -60,7 +60,7 @@ fun GameScreen(
 
         }
         LaunchedEffect(quiz.currentQuestionNumber) {
-            viewModel.startTimer()
+            viewModel.startTimer(navController)
         }
     }
 }
