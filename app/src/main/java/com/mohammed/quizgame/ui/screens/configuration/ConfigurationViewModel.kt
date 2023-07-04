@@ -67,9 +67,9 @@ class ConfigurationViewModel @Inject constructor(
     }
 
     fun saveConfig(
-        selectedCategory: String,
-        selectedLevel: String,
-        selectedQuantity: Int
+        selectedCategory: String?=null,
+        selectedLevel: String?=null,
+        selectedQuantity: Int?=null
     ) {
         viewModelScope.launch {
             saveConfigurationUseCase.invoke(
