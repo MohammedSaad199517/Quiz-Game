@@ -7,9 +7,9 @@ class SaveConfigurationUseCase @Inject constructor(
     private val configurationRepository: ConfigurationRepository) {
 
     suspend operator fun invoke(
-        selectedCategory: String,
-        selectedLevel: String,
-        selectedQuantity: Int) {
+        selectedCategory: String?,
+        selectedLevel: String?,
+        selectedQuantity: Int?) {
         configurationRepository.saveConfiguration(
             selectedCategory,
             selectedLevel,
