@@ -32,6 +32,7 @@ fun DropdownCategoryMenuBox(
     if (!isLoading.isLoading) {
         var expandedState by remember { mutableStateOf(false) }
         var selectedOption by remember { mutableStateOf(options[0]) }
+        viewModel.saveConfig(selectedCategory =  selectedOption)
 
 
         Box(

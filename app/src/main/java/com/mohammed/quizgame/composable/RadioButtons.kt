@@ -45,7 +45,9 @@ fun RadioButtons(
     viewModel: ConfigurationViewModel
 ) {
 
-    val selectLevel = remember { mutableStateOf("") }
+    val selectLevel = remember { mutableStateOf(Level.EASY) }
+    viewModel.saveConfig(selectedLevel= selectLevel.value)
+
 
     Row(
         modifier = Modifier.fillMaxWidth(),
