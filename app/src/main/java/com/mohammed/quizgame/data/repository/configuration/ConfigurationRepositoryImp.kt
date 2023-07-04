@@ -5,11 +5,18 @@ import android.content.SharedPreferences
 
 class ConfigurationRepositoryImp (private val context: Context) :ConfigurationRepository{
 
-    override suspend fun saveConfiguration(selectedCategory: String, selectedLevel: String, selectedQuantity: Int) {
+    override suspend fun saveConfiguration(selectedCategory: String?, selectedLevel: String?, selectedQuantity: Int?) {
         val editor = sharedPreferences.edit()
-        editor.putString(KEY_CATEGORY, selectedCategory)
-        editor.putString(KEY_LEVEL, selectedLevel)
-        editor.putInt(KEY_QUANTITY, selectedQuantity)
+
+        if (selectedQuantity != null){
+            editor.putInt(KEY_QUANTITY, selectedQuantity)
+        }
+        if (selectedLevel != null){
+            editor.putString(KEY_LEVEL, selectedLevel)
+        }
+        if (selectedCategory != null){
+            editor.putString(KEY_CATEGORY, selectedCategory)
+        }
         editor.apply()
     }
 
