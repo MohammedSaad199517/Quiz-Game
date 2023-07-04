@@ -19,7 +19,7 @@ import com.mohammed.quizgame.ui.theme.MainColor
 fun AnswerOption(
     answer: HashMap<String, String>,
     viewModel: GameViewModel,
-    answerId: Int
+    answerId: Int,
 ) {
 
 
@@ -33,6 +33,8 @@ fun AnswerOption(
             viewModel.isCorrectAnswer(answer.keys.first())
             viewModel.getAnswerSelectedId(answerId)
             viewModel.updateScore()
+            viewModel.checkIfAnswerIsSelected()
+
         },
         colors = ButtonDefaults.buttonColors(
 
@@ -40,7 +42,8 @@ fun AnswerOption(
 
 
         ),
-        border = BorderStroke(1.dp, MainColor)
+        border = BorderStroke(1.dp, MainColor),
+        enabled =viewModel.disableButtonWhenAnswerIsSelected(answerId)
 
     ) {
         Text(
