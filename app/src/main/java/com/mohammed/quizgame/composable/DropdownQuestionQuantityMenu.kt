@@ -16,16 +16,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.mohammed.quizgame.ui.screens.configuration.ConfigurationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DropdownQuestionQuantityMenu(
-    viewModel: ConfigurationViewModel
+    updateSelectedQuantity: (value: Int) -> Unit,
 ) {
     var expandedState by remember { mutableStateOf(false) }
     var selectedOption by remember { mutableStateOf(5) }
-    viewModel.updateSelectedQuantity(selectedOption)
+    updateSelectedQuantity(selectedOption)
 
     Box(
         modifier = Modifier.fillMaxWidth(),
@@ -60,7 +59,7 @@ fun DropdownQuestionQuantityMenu(
                         onClick = {
                             selectedOption = questionQuantity
                             expandedState = false
-                            viewModel.updateSelectedQuantity(questionQuantity)
+                            updateSelectedQuantity(questionQuantity)
                         })
                 }
 
