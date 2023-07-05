@@ -1,5 +1,6 @@
 package com.mohammed.quizgame.ui.screens.game
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -31,12 +33,51 @@ fun GameScreen(
     val quiz by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
 
-    Column(modifier = Modifier.fillMaxSize().verticalScroll(state = scrollState))
+    GameContent(
+        navController = navController,
+        scrollState = scrollState,
+        currentScore = quiz.currentScore,
+        question = quiz.question,
+        currentQuestionNumber = quiz.currentQuestionNumber,
+        totalQuestions = quiz.totalQuestions,
+        time = quiz.time,
+        answers = quiz.answers,
+        isCorrectAnswer = viewModel::isCorrectAnswer,
+        getAnswerSelectedId = viewModel::getAnswerSelectedId,
+        updateScore = viewModel::updateScore,
+        checkIfAnswerIsSelected = viewModel::checkIfAnswerIsSelected,
+        backgroundAnswerOptionButton = viewModel::backgroundAnswerOptionButton,
+        disableButtonWhenAnswerIsSelected = viewModel::disableButtonWhenAnswerIsSelected,
+        startTimer = viewModel::startTimer,
+    )
+}
+
+@Composable
+private fun GameContent(
+    scrollState: ScrollState,
+    currentScore: Int,
+    question: String,
+    currentQuestionNumber: Int,
+    totalQuestions: Int,
+    time: Long,
+    answers: List<HashMap<String, String>>,
+    isCorrectAnswer: (answerStatus: String) -> Unit,
+    getAnswerSelectedId: (id: Int) -> Unit,
+    updateScore: () -> Unit,
+    checkIfAnswerIsSelected: () -> Unit,
+    backgroundAnswerOptionButton: (id: Int) -> Color,
+    disableButtonWhenAnswerIsSelected: (id: Int) -> Boolean,
+    startTimer: (navController: NavController) -> Unit,
+    navController: NavController
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(state = scrollState)
+    )
     {
-
-        CurrentScore(quiz.currentScore)
-
-        CurrentQuestion(question = quiz.question, quiz.currentQuestionNumber.toString())
+        CurrentScore(currentScore)
+        CurrentQuestion(question = question, currentQuestionNumber.toString())
 
         Row(
             modifier = Modifier
@@ -45,22 +86,25 @@ fun GameScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            CurrentQuestionNumber(quiz.currentQuestionNumber, quiz.totalQuestions)
-            Timer(quiz.time.toString())
+            CurrentQuestionNumber(currentQuestionNumber, totalQuestions)
+            Timer(time.toString())
 
         }
-
-        quiz.answers.forEach {
-            val id = quiz.answers.indexOf(it)
+        answers.forEach {
+            val id = answers.indexOf(it)
             AnswerOption(
                 answer = it,
-                viewModel = viewModel,
-                answerId = id
+                answerId = id,
+                isCorrectAnswer = isCorrectAnswer,
+                getAnswerSelectedId = getAnswerSelectedId,
+                updateScore = updateScore,
+                checkIfAnswerIsSelected = checkIfAnswerIsSelected,
+                backgroundAnswerOptionButton = backgroundAnswerOptionButton,
+                disableButtonWhenAnswerIsSelected = disableButtonWhenAnswerIsSelected
             )
-
         }
-        LaunchedEffect(quiz.currentQuestionNumber) {
-            viewModel.startTimer(navController)
+        LaunchedEffect(currentQuestionNumber) {
+            startTimer(navController)
         }
     }
 }
