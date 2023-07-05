@@ -13,7 +13,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.mohammed.quizgame.ui.screens.configuration.ConfigurationViewModel
 import com.mohammed.quizgame.ui.theme.MainColor
 
 object Level {
@@ -26,13 +25,13 @@ object Level {
 fun Option(
     selectLevel: MutableState<String>,
     level: String,
-    viewModel: ConfigurationViewModel
+    updateSelectedLevel: (value: String) -> Unit,
 ) {
     RadioButton(
         selected = selectLevel.value == level,
         onClick = {
             selectLevel.value = level
-            viewModel.updateSelectedLevel(selectLevel.value)
+            updateSelectedLevel(selectLevel.value)
         },
         colors = RadioButtonDefaults.colors(MainColor),
 
@@ -42,20 +41,20 @@ fun Option(
 
 @Composable
 fun RadioButtons(
-    viewModel: ConfigurationViewModel
+    updateSelectedLevel: (value: String) -> Unit,
 ) {
 
     val selectLevel = remember { mutableStateOf(Level.EASY) }
-    viewModel.updateSelectedLevel(selectLevel.value)
+    updateSelectedLevel(selectLevel.value)
 
 
     Row(
         modifier = Modifier.fillMaxWidth(),
         Arrangement.Center
     ) {
-        Option(selectLevel, Level.EASY,viewModel)
-        Option(selectLevel, Level.MEDIUM,viewModel)
-        Option(selectLevel, Level.HARD,viewModel)
+        Option(selectLevel, Level.EASY, updateSelectedLevel)
+        Option(selectLevel, Level.MEDIUM, updateSelectedLevel)
+        Option(selectLevel, Level.HARD, updateSelectedLevel)
     }
 
 }
