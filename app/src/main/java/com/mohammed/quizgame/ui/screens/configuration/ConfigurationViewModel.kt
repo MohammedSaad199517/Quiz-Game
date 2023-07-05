@@ -26,7 +26,6 @@ class ConfigurationViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(ConfigurationUISate())
     val uiState: StateFlow<ConfigurationUISate> = _uiState
 
-
     init {
         viewModelScope.launch(Dispatchers.IO) {
             cacheQuizUseCase.invoke()
@@ -34,11 +33,12 @@ class ConfigurationViewModel @Inject constructor(
         }
     }
 
-    suspend fun getAllQuestions() {
+    private suspend fun getAllQuestions() {
         _uiState.update {
             it.copy(
                 isLoading = false,
-                categories = getAllCategoryUseCase.invoke()
+                categories = getAllCategoryUseCase.invoke(),
+                numberOfAvailableQuestion = getQuizUseCase.invoke().size
 
             )
         }
@@ -56,15 +56,7 @@ class ConfigurationViewModel @Inject constructor(
         _uiState.update { it.copy(selectedQuantity = value) }
     }
 
-    fun chickIfNumberOfQuestionIsAvailable() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _uiState.update {
-                it.copy(
-                    isNumberOfQuestionAvailable = getQuizUseCase.invoke().size <= uiState.value.selectedQuantity
-                )
-            }
-        }
-    }
+
 
     fun saveConfig(
         selectedCategory: String?=null,
@@ -77,6 +69,32 @@ class ConfigurationViewModel @Inject constructor(
                 selectedLevel,
                 selectedQuantity
             )
+        }
+    }
+fun updateNumberOfAvailableQuestion(){
+   viewModelScope.launch(Dispatchers.IO) {
+       _uiState.update {
+           it.copy(
+               numberOfAvailableQuestion =  getQuizUseCase.invoke().size
+           )
+       }
+   }
+}
+    fun openAlertDialogIfRequireNumberOfQuestionIsNotAvailable(){
+        viewModelScope.launch(Dispatchers.IO) {
+            if (getQuizUseCase.invoke().size < uiState.value.selectedQuantity) {
+                _uiState.update {
+                    it.copy(isAlertDialogOpen = true)
+                }
+            }
+
+        }
+    }
+    fun closeAlertDialog(){
+        viewModelScope.launch(Dispatchers.IO) {
+                _uiState.update {
+                    it.copy(isAlertDialogOpen = false)
+                }
         }
     }
 
