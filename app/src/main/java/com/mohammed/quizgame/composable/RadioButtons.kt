@@ -46,7 +46,7 @@ fun RadioButtons(
 ) {
 
     val selectLevel = remember { mutableStateOf(Level.EASY) }
-    viewModel.saveConfig(selectedLevel= selectLevel.value)
+    viewModel.updateSelectedLevel(selectLevel.value)
 
 
     Row(
