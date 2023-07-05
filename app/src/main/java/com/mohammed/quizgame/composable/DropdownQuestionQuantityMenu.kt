@@ -25,7 +25,7 @@ fun DropdownQuestionQuantityMenu(
 ) {
     var expandedState by remember { mutableStateOf(false) }
     var selectedOption by remember { mutableStateOf(5) }
-    viewModel.saveConfig(selectedQuantity =  selectedOption)
+    viewModel.updateSelectedQuantity(selectedOption)
 
     Box(
         modifier = Modifier.fillMaxWidth(),
