@@ -1,43 +1,50 @@
 package com.mohammed.quizgame.composable
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.mohammed.quizgame.R
 import com.mohammed.quizgame.Screen
 
 @Composable
-fun AlertDialog(open: Boolean?, navController: NavController) {
-    var openDialog by remember { mutableStateOf(open) }
-    openDialog = open
+fun AlertDialog(
+    isAlertDialogOpen: Boolean,
+    navController: NavController,
+    numberOfAvailableQuestion: Int,
+    saveConfig: (selectedCategory: String?, selectedLevel: String?, selectedQuantity: Int?) -> Unit,
+    updateNumberOfAvailableQuestion: () -> Unit,
+    closeAlertDialog: () -> Unit
+) {
 
-    if (openDialog == true) {
+
+    if (isAlertDialogOpen) {
         AlertDialog(
             onDismissRequest = { },
-            title = { Text(text = "oops") },
-            text = { Text(text = " Sorry ,There is just 4 questions in this level of category") },
+            title = { Text(text = stringResource(R.string.oops)) },
+            text = { Text(text = " Sorry ,There is just $numberOfAvailableQuestion questions in this level of category") },
             confirmButton = {
                 TextButton(onClick = {
+                    updateNumberOfAvailableQuestion()
+                    saveConfig(null, null, numberOfAvailableQuestion)
+                    closeAlertDialog()
                     navController.navigate(Screen.GameScreen.route)
-                    openDialog = false
-                }) {
-                    Text(text = "continue")
 
+                }) {
+                    Text(text = stringResource(R.string.Continue))
                 }
             },
             dismissButton = {
                 TextButton(onClick = {
-                    openDialog = false
+                    closeAlertDialog()
                 }) {
-                    Text(text = "cansel")
+                    Text(text = stringResource(R.string.cansel))
                 }
             }
         )
     }
+
 }
 
