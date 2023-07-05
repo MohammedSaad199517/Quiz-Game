@@ -29,7 +29,6 @@ fun CurrentQuestion(question: String, numberOfQuestion: String) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-//            .padding( 16.dp)
                 .height(150.dp),
             textAlign = TextAlign.Start,
             fontSize = 18.sp,

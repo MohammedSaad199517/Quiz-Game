@@ -3,4 +3,7 @@
     <string name="select_question_category">Select Question Category</string>
     <string name="select_difficult_level">Select Difficult Level</string>
     <string name="select_question_quantity">Select Question Quantity</string>
+    <string name="oops">oops</string>
+    <string name="Continue">Continue</string>
+    <string name="cansel">Cansel</string>
 </resources>
