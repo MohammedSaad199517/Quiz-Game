@@ -66,7 +66,15 @@ class GameViewModel @Inject constructor(
                             )
                         }
                     } else {
-                        navigateToWinnerScreen(navController)
+                        val currentScore = uiState.value.currentScore
+                        val totalNumberOfQuizQuestion = getSavedConfigurationUseCase.invoke()?.selectedQuantity!!.toFloat()
+                        if (currentScore / totalNumberOfQuizQuestion.toDouble() >= 0.5){
+                            navigateToWinnerScreen(navController)
+                        }else{
+                            navigateToLoserScreen(navController)
+
+                        }
+
                     }
 
                 }
@@ -82,6 +90,12 @@ class GameViewModel @Inject constructor(
     private fun navigateToWinnerScreen(navController: NavController) {
         viewModelScope.launch {
             navController.navigate("${Screen.WinnerScreen.route}/${_uiState.value.currentScore}")
+
+        }
+    }
+    private fun navigateToLoserScreen(navController: NavController) {
+        viewModelScope.launch {
+            navController.navigate("${Screen.LoserScreen.route}/${_uiState.value.currentScore}")
 
         }
     }
@@ -102,7 +116,12 @@ class GameViewModel @Inject constructor(
     }
 
     fun isCorrectAnswer(answerStatus: String) {
-        _uiState.update { it.copy(isAnswerCorrect = answerStatus == "correctAnswer") }
+        _uiState.update {
+            it.copy(
+                isAnswerCorrect = answerStatus == "correctAnswer",
+                isAnswerSelected = true
+            )
+        }
     }
 
     fun disableButtonWhenAnswerIsSelected(id: Int): Boolean {
@@ -126,9 +145,6 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    fun checkIfAnswerIsSelected() {
-        _uiState.update { it.copy(isAnswerSelected = true) }
-    }
 
     private companion object {
         const val totalTime = 5000L

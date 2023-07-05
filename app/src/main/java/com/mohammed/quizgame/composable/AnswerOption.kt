@@ -20,7 +20,6 @@ fun AnswerOption(
     isCorrectAnswer: (answerStatus: String) -> Unit,
     getAnswerSelectedId: (id: Int) -> Unit,
     updateScore: () -> Unit,
-    checkIfAnswerIsSelected: () -> Unit,
     backgroundAnswerOptionButton: (id: Int) -> Color,
     disableButtonWhenAnswerIsSelected: (id: Int) -> Boolean,
     answerId: Int,
@@ -37,7 +36,7 @@ fun AnswerOption(
             isCorrectAnswer(answer.keys.first())
             getAnswerSelectedId(answerId)
             updateScore()
-            checkIfAnswerIsSelected()
+
 
         },
         colors = ButtonDefaults.buttonColors(

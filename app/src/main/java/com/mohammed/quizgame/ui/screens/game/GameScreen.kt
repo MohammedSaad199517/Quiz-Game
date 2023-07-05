@@ -45,7 +45,6 @@ fun GameScreen(
         isCorrectAnswer = viewModel::isCorrectAnswer,
         getAnswerSelectedId = viewModel::getAnswerSelectedId,
         updateScore = viewModel::updateScore,
-        checkIfAnswerIsSelected = viewModel::checkIfAnswerIsSelected,
         backgroundAnswerOptionButton = viewModel::backgroundAnswerOptionButton,
         disableButtonWhenAnswerIsSelected = viewModel::disableButtonWhenAnswerIsSelected,
         startTimer = viewModel::startTimer,
@@ -64,7 +63,6 @@ private fun GameContent(
     isCorrectAnswer: (answerStatus: String) -> Unit,
     getAnswerSelectedId: (id: Int) -> Unit,
     updateScore: () -> Unit,
-    checkIfAnswerIsSelected: () -> Unit,
     backgroundAnswerOptionButton: (id: Int) -> Color,
     disableButtonWhenAnswerIsSelected: (id: Int) -> Boolean,
     startTimer: (navController: NavController) -> Unit,
@@ -98,7 +96,6 @@ private fun GameContent(
                 isCorrectAnswer = isCorrectAnswer,
                 getAnswerSelectedId = getAnswerSelectedId,
                 updateScore = updateScore,
-                checkIfAnswerIsSelected = checkIfAnswerIsSelected,
                 backgroundAnswerOptionButton = backgroundAnswerOptionButton,
                 disableButtonWhenAnswerIsSelected = disableButtonWhenAnswerIsSelected
             )
