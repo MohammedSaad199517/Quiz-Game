@@ -12,13 +12,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mohammed.quizgame.ui.screens.game.GameViewModel
 import com.mohammed.quizgame.ui.theme.MainColor
 
 @Composable
 fun AnswerOption(
     answer: HashMap<String, String>,
-    viewModel: GameViewModel,
+    isCorrectAnswer: (answerStatus: String) -> Unit,
+    getAnswerSelectedId: (id: Int) -> Unit,
+    updateScore: () -> Unit,
+    checkIfAnswerIsSelected: () -> Unit,
+    backgroundAnswerOptionButton: (id: Int) -> Color,
+    disableButtonWhenAnswerIsSelected: (id: Int) -> Boolean,
     answerId: Int,
 ) {
 
@@ -30,20 +34,20 @@ fun AnswerOption(
             .padding(horizontal = 16.dp, vertical = 4.dp),
         shape = RoundedCornerShape(16.dp),
         onClick = {
-            viewModel.isCorrectAnswer(answer.keys.first())
-            viewModel.getAnswerSelectedId(answerId)
-            viewModel.updateScore()
-            viewModel.checkIfAnswerIsSelected()
+            isCorrectAnswer(answer.keys.first())
+            getAnswerSelectedId(answerId)
+            updateScore()
+            checkIfAnswerIsSelected()
 
         },
         colors = ButtonDefaults.buttonColors(
 
-            viewModel.backgroundAnswerOptionButton(answerId)
+            backgroundAnswerOptionButton(answerId)
 
 
         ),
         border = BorderStroke(1.dp, MainColor),
-        enabled =viewModel.disableButtonWhenAnswerIsSelected(answerId)
+        enabled = disableButtonWhenAnswerIsSelected(answerId)
 
     ) {
         Text(
