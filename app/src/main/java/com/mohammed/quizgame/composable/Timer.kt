@@ -15,15 +15,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun Timer(time:String) {
+fun Timer(time:Long ,backgroundColorTimer:(time:Long)->Color) {
     Box(
         modifier = Modifier
             .size(50.dp)
-            .background(Color.Red, CircleShape),
+            .background(
+             backgroundColorTimer(time)
+                , CircleShape),
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = time,
+            text = "$time",
             color = Color.White,
             style = TextStyle(textAlign = TextAlign.Center),
             fontSize = 18.sp

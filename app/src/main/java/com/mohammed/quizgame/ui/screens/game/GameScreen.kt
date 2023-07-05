@@ -48,6 +48,8 @@ fun GameScreen(
         backgroundAnswerOptionButton = viewModel::backgroundAnswerOptionButton,
         disableButtonWhenAnswerIsSelected = viewModel::disableButtonWhenAnswerIsSelected,
         startTimer = viewModel::startTimer,
+        backgroundColorTimer = viewModel::backgroundColorTimer,
+        nextQuestion = viewModel::goToNextQuestion
     )
 }
 
@@ -66,7 +68,9 @@ private fun GameContent(
     backgroundAnswerOptionButton: (id: Int) -> Color,
     disableButtonWhenAnswerIsSelected: (id: Int) -> Boolean,
     startTimer: (navController: NavController) -> Unit,
-    navController: NavController
+    navController: NavController,
+    backgroundColorTimer: (time: Long) -> Color,
+    nextQuestion: (navController: NavController) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -85,7 +89,7 @@ private fun GameContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             CurrentQuestionNumber(currentQuestionNumber, totalQuestions)
-            Timer(time.toString())
+            Timer(time, backgroundColorTimer)
 
         }
         answers.forEach {
@@ -97,7 +101,10 @@ private fun GameContent(
                 getAnswerSelectedId = getAnswerSelectedId,
                 updateScore = updateScore,
                 backgroundAnswerOptionButton = backgroundAnswerOptionButton,
-                disableButtonWhenAnswerIsSelected = disableButtonWhenAnswerIsSelected
+                disableButtonWhenAnswerIsSelected = disableButtonWhenAnswerIsSelected,
+                nextQuestion = nextQuestion,
+                navController = navController
+
             )
         }
         LaunchedEffect(currentQuestionNumber) {

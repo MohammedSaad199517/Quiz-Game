@@ -11,6 +11,7 @@ import com.mohammed.quizgame.domain.usecase.GetSavedConfigurationUseCase
 import com.mohammed.quizgame.ui.theme.White87
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -42,57 +43,79 @@ class GameViewModel @Inject constructor(
     fun startTimer(navController: NavController) {
         countdownTimerUseCase.startTimer(
             totalTime = totalTime,
-            onTick = { secondsRemaining ->
-                viewModelScope.launch(Dispatchers.IO) {
-                    _uiState.update {
-                        it.copy(
-                            time = secondsRemaining
-                        )
-                    }
-                }
-            },
-            onFinish = {
-                viewModelScope.launch(Dispatchers.IO) {
-                    val currentQuestion = _uiState.value.currentQuestionNumber
-                    if (currentQuestion < getSavedConfigurationUseCase.invoke()?.selectedQuantity!!) {
-                        _uiState.update {
-                            it.copy(
-                                currentQuestionNumber = currentQuestion + 1,
-                                question = getQuizUseCase.invoke().get(currentQuestion).question,
-                                answers = getQuizUseCase.invoke().get(currentQuestion).answers,
-                                isAnswerCorrect = null,
-                                answerSelectedId = null,
-                                isAnswerSelected = false
-                            )
-                        }
-                    } else {
-                        val currentScore = uiState.value.currentScore
-                        val totalNumberOfQuizQuestion = getSavedConfigurationUseCase.invoke()?.selectedQuantity!!.toFloat()
-                        if (currentScore / totalNumberOfQuizQuestion.toDouble() >= 0.5){
-                            navigateToWinnerScreen(navController)
-                        }else{
-                            navigateToLoserScreen(navController)
-
-                        }
-
-                    }
-
-                }
-            },
+            onTick = { secondsRemaining -> onTickTimer(secondsRemaining) },
+            onFinish = { onFinishTimer(navController) },
             interval = interval
         )
     }
 
-    fun stopTimer() {
+    private fun onTickTimer(secondsRemaining: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.update {
+                it.copy(
+                    time = secondsRemaining
+                )
+            }
+        }
+    }
+
+    private suspend fun getNewQuestion(navController: NavController) {
+        val currentQuestionNumber = _uiState.value.currentQuestionNumber
+        val totalQuestions = getSavedConfigurationUseCase.invoke()?.selectedQuantity!!
+        val isQuizNotFinish = currentQuestionNumber < totalQuestions
+        if (isQuizNotFinish) {
+            _uiState.update {
+                it.copy(
+                    currentQuestionNumber = currentQuestionNumber + 1,
+                    question = getQuizUseCase.invoke()[currentQuestionNumber].question,
+                    answers = getQuizUseCase.invoke()[currentQuestionNumber].answers,
+                    isAnswerCorrect = null,
+                    answerSelectedId = null,
+                    isAnswerSelected = false
+                )
+            }
+        } else finishQuiz(navController)
+    }
+
+    private fun onFinishTimer(navController: NavController) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            getNewQuestion(navController = navController)
+        }
+    }
+
+    fun goToNextQuestion(navController: NavController) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            stopTimer()
+            delay(2000L)
+            getNewQuestion(navController = navController)
+        }
+    }
+
+    private fun finishQuiz(navController: NavController) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val currentScore = uiState.value.currentScore
+            val totalNumberOfQuizQuestion =
+                getSavedConfigurationUseCase.invoke()?.selectedQuantity!!.toFloat()
+            if (currentScore / totalNumberOfQuizQuestion.toDouble() >= 0.5) {
+                navigateToWinnerScreen(navController)
+            } else {
+                navigateToLoserScreen(navController)
+            }
+        }
+    }
+
+    private fun stopTimer() {
         countdownTimerUseCase.stopTimer()
     }
 
     private fun navigateToWinnerScreen(navController: NavController) {
         viewModelScope.launch {
             navController.navigate("${Screen.WinnerScreen.route}/${_uiState.value.currentScore}")
-
         }
     }
+
     private fun navigateToLoserScreen(navController: NavController) {
         viewModelScope.launch {
             navController.navigate("${Screen.LoserScreen.route}/${_uiState.value.currentScore}")
@@ -118,7 +141,7 @@ class GameViewModel @Inject constructor(
     fun isCorrectAnswer(answerStatus: String) {
         _uiState.update {
             it.copy(
-                isAnswerCorrect = answerStatus == "correctAnswer",
+                isAnswerCorrect = answerStatus == correctAnswer,
                 isAnswerSelected = true
             )
         }
@@ -145,9 +168,16 @@ class GameViewModel @Inject constructor(
         }
     }
 
+    fun backgroundColorTimer(time: Long): Color {
+        if (time > 20) {
+            return Color.Green
+        }
+        return Color.Red
+    }
 
     private companion object {
-        const val totalTime = 5000L
+        const val totalTime = 60000L
         const val interval = 1000L
+        const val correctAnswer = "correctAnswer"
     }
 }

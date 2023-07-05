@@ -14,7 +14,6 @@ fun TextSelect(text:String) {
         text = text,
         modifier = Modifier
             .fillMaxWidth(),
-        textAlign = TextAlign.Center,
         fontSize = 18.sp,
         color = MainColor
 

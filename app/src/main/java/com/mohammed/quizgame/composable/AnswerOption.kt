@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.mohammed.quizgame.ui.theme.MainColor
 
 @Composable
@@ -23,6 +24,9 @@ fun AnswerOption(
     backgroundAnswerOptionButton: (id: Int) -> Color,
     disableButtonWhenAnswerIsSelected: (id: Int) -> Boolean,
     answerId: Int,
+    navController: NavController,
+    nextQuestion: ( navController: NavController) -> Unit
+
 ) {
 
 
@@ -36,6 +40,8 @@ fun AnswerOption(
             isCorrectAnswer(answer.keys.first())
             getAnswerSelectedId(answerId)
             updateScore()
+            nextQuestion(navController)
+
 
 
         },

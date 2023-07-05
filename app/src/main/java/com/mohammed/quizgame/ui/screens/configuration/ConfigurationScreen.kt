@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -47,8 +49,6 @@ fun ConfigurationScreen(
         openAlertDialogIfRequireNumberOfQuestionIsNotAvailable = viewModel::openAlertDialogIfRequireNumberOfQuestionIsNotAvailable,
         isAlertDialogOpen = uiState.isAlertDialogOpen,
         closeAlertDialog = viewModel::closeAlertDialog
-
-
     )
 }
 
@@ -70,13 +70,9 @@ private fun ConfigurationContent(
     openAlertDialogIfRequireNumberOfQuestionIsNotAvailable: () -> Unit,
     isAlertDialogOpen: Boolean,
     closeAlertDialog: () -> Unit
-
-
 ) {
     Column(
-        modifier = Modifier.fillMaxSize()
-
-
+        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)
     ) {
         Spacer(modifier = Modifier.height(32.dp))
         TextSelect(text = stringResource(R.string.select_question_category))
@@ -98,6 +94,7 @@ private fun ConfigurationContent(
         DropdownQuestionQuantityMenu(updateSelectedQuantity)
         Spacer(modifier = Modifier.height(32.dp))
         StartButton(
+            modifier=Modifier.fillMaxWidth().padding(16.dp),
             navController = navController,
             navigateToGameScreen = navigateToGameScreen,
             saveConfig = saveConfig,
@@ -115,11 +112,8 @@ private fun ConfigurationContent(
             saveConfig = saveConfig,
             updateNumberOfAvailableQuestion = updateNumberOfAvailableQuestion,
             closeAlertDialog = closeAlertDialog
-
-
         )
     }
-
 }
 
 
