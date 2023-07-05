@@ -32,8 +32,8 @@ class GameViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     totalQuestions = getSavedConfigurationUseCase.invoke()?.selectedQuantity!!,
-                    question = getQuizUseCase.invoke().get(0).question,
-                    answers = getQuizUseCase.invoke().get(0).answers,
+                    question = getQuizUseCase.invoke().first().question,
+                    answers = getQuizUseCase.invoke().first().answers,
                 )
             }
         }
