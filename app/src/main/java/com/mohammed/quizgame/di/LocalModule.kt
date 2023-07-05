@@ -19,7 +19,7 @@ object LocalModule {
 
     @Singleton
     @Provides
-    fun provideFootballDatabase(
+    fun provideQuizGameDatabase(
         @ApplicationContext context: Context
     ): QuizGameDatabase =
         Room.databaseBuilder(
