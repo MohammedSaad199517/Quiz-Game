@@ -10,7 +10,6 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,22 +17,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.mohammed.quizgame.ui.screens.configuration.ConfigurationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DropdownCategoryMenuBox(
     options: List<String>,
-    viewModel: ConfigurationViewModel
-
+    updateSelectedCategory: (selectedOption: String) -> Unit,
+    isLoading: Boolean
 ) {
-    val isLoading by viewModel.uiState.collectAsState()
 
-    if (!isLoading.isLoading) {
+    if (!isLoading) {
         var expandedState by remember { mutableStateOf(false) }
         var selectedOption by remember { mutableStateOf(options[0]) }
-        viewModel.updateSelectedCategory(selectedOption)
-
+        updateSelectedCategory(selectedOption)
 
 
         Box(
@@ -70,13 +66,13 @@ fun DropdownCategoryMenuBox(
                             onClick = {
                                 selectedOption = selectedText
                                 expandedState = false
-                                viewModel.updateSelectedCategory(selectedOption)
+                                updateSelectedCategory(selectedOption)
                             })
                     }
                 }
             }
         }
-    }else{
+    } else {
         ProgressBar()
     }
 
