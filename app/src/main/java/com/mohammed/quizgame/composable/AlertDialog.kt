@@ -6,22 +6,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import com.mohammed.quizgame.Screen
 
 @Composable
 fun AlertDialog(open: Boolean?, navController: NavController) {
-    val openDialog = remember { mutableStateOf(open) }
+    var openDialog by remember { mutableStateOf(open) }
+    openDialog = open
 
-    if (openDialog.value == true) {
+    if (openDialog == true) {
         AlertDialog(
-            onDismissRequest = {  },
+            onDismissRequest = { },
             title = { Text(text = "oops") },
             text = { Text(text = " Sorry ,There is just 4 questions in this level of category") },
             confirmButton = {
                 TextButton(onClick = {
                     navController.navigate(Screen.GameScreen.route)
-                    openDialog.value = false
+                    openDialog = false
                 }) {
                     Text(text = "continue")
 
@@ -29,16 +32,12 @@ fun AlertDialog(open: Boolean?, navController: NavController) {
             },
             dismissButton = {
                 TextButton(onClick = {
-                    openDialog.value = false
+                    openDialog = false
                 }) {
                     Text(text = "cansel")
-
                 }
             }
         )
-
     }
-
-
 }
 
