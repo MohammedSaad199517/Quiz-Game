@@ -37,13 +37,18 @@ fun ConfigurationScreen(
         updateSelectedLevel = viewModel::updateSelectedLevel,
         updateSelectedQuantity = viewModel::updateSelectedQuantity,
         navController = navController,
-        chickIfNumberOfQuestionIsAvailable = viewModel::chickIfNumberOfQuestionIsAvailable,
         navigateToGameScreen = viewModel::navigateToGameScreen,
         saveConfig = viewModel::saveConfig,
         selectedCategory = uiState.selectedCategory,
         selectedLevel = uiState.selectedLevel,
         selectedQuantity = uiState.selectedQuantity,
-        isNumberOfQuestionAvailable = uiState.isNumberOfQuestionAvailable,
+        numberOfAvailableQuestion = uiState.numberOfAvailableQuestion,
+        updateNumberOfAvailableQuestion = viewModel::updateNumberOfAvailableQuestion,
+        openAlertDialogIfRequireNumberOfQuestionIsNotAvailable = viewModel::openAlertDialogIfRequireNumberOfQuestionIsNotAvailable,
+        isAlertDialogOpen = uiState.isAlertDialogOpen,
+        closeAlertDialog = viewModel::closeAlertDialog
+
+
     )
 }
 
@@ -55,13 +60,16 @@ private fun ConfigurationContent(
     updateSelectedLevel: (value: String) -> Unit,
     updateSelectedQuantity: (value: Int) -> Unit,
     navController: NavController,
-    chickIfNumberOfQuestionIsAvailable: () -> Unit,
     navigateToGameScreen: (navController: NavController) -> Unit,
     saveConfig: (selectedCategory: String?, selectedLevel: String?, selectedQuantity: Int?) -> Unit,
     selectedCategory: String?,
     selectedLevel: String?,
     selectedQuantity: Int?,
-    isNumberOfQuestionAvailable: Boolean?
+    numberOfAvailableQuestion: Int,
+    updateNumberOfAvailableQuestion: () -> Unit,
+    openAlertDialogIfRequireNumberOfQuestionIsNotAvailable: () -> Unit,
+    isAlertDialogOpen: Boolean,
+    closeAlertDialog: () -> Unit
 
 
 ) {
@@ -90,18 +98,25 @@ private fun ConfigurationContent(
         DropdownQuestionQuantityMenu(updateSelectedQuantity)
         Spacer(modifier = Modifier.height(32.dp))
         StartButton(
-            navController,
-            chickIfNumberOfQuestionIsAvailable,
-            navigateToGameScreen,
-            saveConfig,
-            selectedCategory,
-            selectedLevel,
-            selectedQuantity
+            navController = navController,
+            navigateToGameScreen = navigateToGameScreen,
+            saveConfig = saveConfig,
+            selectedCategory = selectedCategory,
+            selectedLevel = selectedLevel,
+            selectedQuantity = selectedQuantity,
+            openAlertDialogIfRequireNumberOfQuestionIsNotAvailable = openAlertDialogIfRequireNumberOfQuestionIsNotAvailable
+
         )
 
         AlertDialog(
-            isNumberOfQuestionAvailable,
-            navController
+            isAlertDialogOpen = isAlertDialogOpen,
+            navController = navController,
+            numberOfAvailableQuestion = numberOfAvailableQuestion,
+            saveConfig = saveConfig,
+            updateNumberOfAvailableQuestion = updateNumberOfAvailableQuestion,
+            closeAlertDialog = closeAlertDialog
+
+
         )
     }
 
