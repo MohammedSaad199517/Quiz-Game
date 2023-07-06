@@ -21,26 +21,32 @@ class ConfigurationViewModel @Inject constructor(
     private val getAllCategoryUseCase: GetAllCategoryUseCase,
     private val cacheQuizUseCase: CacheQuizUseCase,
     private val saveConfigurationUseCase: SaveConfigurationUseCase,
-    private val getQuizUseCase: GetQuizUseCase
-) : ViewModel() {
+    private val getQuizUseCase: GetQuizUseCase,
+    ) : ViewModel() {
     private val _uiState = MutableStateFlow(ConfigurationUISate())
     val uiState: StateFlow<ConfigurationUISate> = _uiState
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             cacheQuizUseCase.invoke()
-            getAllQuestions()
+            getAllCategories()
+            saveConfig(
+                selectedCategory = _uiState.value.selectedCategory,
+                selectedLevel = _uiState.value.selectedLevel,
+                selectedQuantity = _uiState.value.selectedQuantity
+            )
+
         }
     }
 
-    private suspend fun getAllQuestions() {
+    private suspend fun getAllCategories() {
+
         _uiState.update {
             it.copy(
                 isLoading = false,
                 categories = getAllCategoryUseCase.invoke(),
-                numberOfAvailableQuestion = getQuizUseCase.invoke().size
 
-            )
+                )
         }
     }
 
@@ -57,13 +63,13 @@ class ConfigurationViewModel @Inject constructor(
     }
 
 
-
     fun saveConfig(
-        selectedCategory: String?=null,
-        selectedLevel: String?=null,
-        selectedQuantity: Int?=null
+        selectedCategory: String? = null,
+        selectedLevel: String? = null,
+        selectedQuantity: Int? = null
     ) {
-        viewModelScope.launch {
+
+        viewModelScope.launch(Dispatchers.IO) {
             saveConfigurationUseCase.invoke(
                 selectedCategory,
                 selectedLevel,
@@ -71,16 +77,18 @@ class ConfigurationViewModel @Inject constructor(
             )
         }
     }
-fun updateNumberOfAvailableQuestion(){
-   viewModelScope.launch(Dispatchers.IO) {
-       _uiState.update {
-           it.copy(
-               numberOfAvailableQuestion =  getQuizUseCase.invoke().size
-           )
-       }
-   }
-}
-    fun openAlertDialogIfRequireNumberOfQuestionIsNotAvailable(){
+
+    fun updateNumberOfAvailableQuestion() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.update {
+                it.copy(
+                    numberOfAvailableQuestion = getQuizUseCase.invoke().size
+                )
+            }
+        }
+    }
+
+    fun openAlertDialogIfRequireNumberOfQuestionIsNotAvailable() {
         viewModelScope.launch(Dispatchers.IO) {
             if (getQuizUseCase.invoke().size < uiState.value.selectedQuantity) {
                 _uiState.update {
@@ -90,11 +98,12 @@ fun updateNumberOfAvailableQuestion(){
 
         }
     }
-    fun closeAlertDialog(){
+
+    fun closeAlertDialog() {
         viewModelScope.launch(Dispatchers.IO) {
-                _uiState.update {
-                    it.copy(isAlertDialogOpen = false)
-                }
+            _uiState.update {
+                it.copy(isAlertDialogOpen = false)
+            }
         }
     }
 
@@ -106,5 +115,15 @@ fun updateNumberOfAvailableQuestion(){
                 }
             }
         }
+    }
+
+    fun textMessage(numberOfAvailableQuestion: Int): String {
+        return if (numberOfAvailableQuestion > 0) {
+            "Sorry ,There is just $numberOfAvailableQuestion questions in this level of category"
+        } else noQuestionsFounded
+    }
+
+    private companion object {
+        const val noQuestionsFounded = "there is no questions in this level of category  "
     }
 }
