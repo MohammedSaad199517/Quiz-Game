@@ -26,12 +26,19 @@ fun Option(
     selectLevel: MutableState<String>,
     level: String,
     updateSelectedLevel: (value: String) -> Unit,
-) {
+    saveConfig: (selectedCategory: String?, selectedLevel: String?, selectedQuantity: Int?) -> Unit,
+
+    ) {
     RadioButton(
         selected = selectLevel.value == level,
         onClick = {
             selectLevel.value = level
             updateSelectedLevel(selectLevel.value)
+            saveConfig(
+                null,
+                selectLevel.value,
+                null
+            )
         },
         colors = RadioButtonDefaults.colors(MainColor),
 
@@ -42,19 +49,27 @@ fun Option(
 @Composable
 fun RadioButtons(
     updateSelectedLevel: (value: String) -> Unit,
-) {
+    saveConfig: (selectedCategory: String?, selectedLevel: String?, selectedQuantity: Int?) -> Unit,
+
+    ) {
 
     val selectLevel = remember { mutableStateOf(Level.EASY) }
     updateSelectedLevel(selectLevel.value)
+    saveConfig(
+        null,
+        selectLevel.value,
+        null
+    )
+
 
 
     Row(
         modifier = Modifier.fillMaxWidth(),
         Arrangement.Center
     ) {
-        Option(selectLevel, Level.EASY, updateSelectedLevel)
-        Option(selectLevel, Level.MEDIUM, updateSelectedLevel)
-        Option(selectLevel, Level.HARD, updateSelectedLevel)
+        Option(selectLevel, Level.EASY, updateSelectedLevel, saveConfig)
+        Option(selectLevel, Level.MEDIUM, updateSelectedLevel, saveConfig)
+        Option(selectLevel, Level.HARD, updateSelectedLevel, saveConfig)
     }
 
 }
