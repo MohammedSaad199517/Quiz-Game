@@ -32,7 +32,7 @@ class GameViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.update {
                 it.copy(
-                    totalQuestions = getSavedConfigurationUseCase.invoke()?.selectedQuantity!!,
+                    totalQuestions = getSavedConfigurationUseCase.invoke().selectedQuantity!!,
                     question = getQuizUseCase.invoke().first().question,
                     answers = getQuizUseCase.invoke().first().answers,
                 )
@@ -61,8 +61,9 @@ class GameViewModel @Inject constructor(
 
     private suspend fun getNewQuestion(navController: NavController) {
         val currentQuestionNumber = _uiState.value.currentQuestionNumber
-        val totalQuestions = getSavedConfigurationUseCase.invoke()?.selectedQuantity!!
+        val totalQuestions = getSavedConfigurationUseCase.invoke().selectedQuantity!!
         val isQuizNotFinish = currentQuestionNumber < totalQuestions
+
         if (isQuizNotFinish) {
             _uiState.update {
                 it.copy(
@@ -97,7 +98,7 @@ class GameViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val currentScore = uiState.value.currentScore
             val totalNumberOfQuizQuestion =
-                getSavedConfigurationUseCase.invoke()?.selectedQuantity!!.toFloat()
+                getSavedConfigurationUseCase.invoke().selectedQuantity!!.toFloat()
             if (currentScore / totalNumberOfQuizQuestion.toDouble() >= 0.5) {
                 navigateToWinnerScreen(navController)
             } else {

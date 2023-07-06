@@ -4,9 +4,9 @@ import com.mohammed.quizgame.data.repository.quiz.QuizRepository
 import javax.inject.Inject
 
 class GetAllCategoryUseCase @Inject constructor(
-    private val quizGameRepository: QuizRepository
+    private val quizRepository: QuizRepository,
 ) {
-    suspend operator fun invoke() =
-        quizGameRepository.getAllCachedQuestions().map { it.category }.distinct()
-
+    suspend operator fun invoke(): List<String> {
+        return quizRepository.getAllCachedQuestions().map { it.category }.distinct()
+    }
 }

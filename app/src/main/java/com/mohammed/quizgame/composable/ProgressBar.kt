@@ -3,6 +3,7 @@ package com.mohammed.quizgame.composable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
@@ -21,7 +22,9 @@ fun ProgressBar() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CircularProgressIndicator(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier
+                .padding(16.dp)
+                .height(56.dp),
             color = Color.Green,
             strokeWidth = Dp(value = 4F)
 
@@ -31,6 +34,6 @@ fun ProgressBar() {
 }
 @Composable
 @Preview(showSystemUi = true)
-fun PreviewProgressBar(){
+fun PreviewProgressBar() {
     ProgressBar()
 }
