@@ -15,25 +15,30 @@ fun AlertDialog(
     navController: NavController,
     numberOfAvailableQuestion: Int,
     saveConfig: (selectedCategory: String?, selectedLevel: String?, selectedQuantity: Int?) -> Unit,
-    updateNumberOfAvailableQuestion: () -> Unit,
-    closeAlertDialog: () -> Unit
+    closeAlertDialog: () -> Unit,
+    textMessage: (numberOfAvailableQuestion: Int) -> String
+
 ) {
 
 
     if (isAlertDialogOpen) {
+        saveConfig(null, null, numberOfAvailableQuestion)
+
         AlertDialog(
             onDismissRequest = { },
             title = { Text(text = stringResource(R.string.oops)) },
-            text = { Text(text = " Sorry ,There is just $numberOfAvailableQuestion questions in this level of category") },
+            text = {
+                Text(text = textMessage(numberOfAvailableQuestion))
+            },
             confirmButton = {
-                TextButton(onClick = {
-                    updateNumberOfAvailableQuestion()
-                    saveConfig(null, null, numberOfAvailableQuestion)
-                    closeAlertDialog()
-                    navController.navigate(Screen.GameScreen.route)
+                if (numberOfAvailableQuestion > 0) {
+                    TextButton(onClick = {
+                        closeAlertDialog()
+                        navController.navigate(Screen.GameScreen.route)
 
-                }) {
-                    Text(text = stringResource(R.string.Continue))
+                    }) {
+                        Text(text = stringResource(R.string.Continue))
+                    }
                 }
             },
             dismissButton = {
@@ -45,6 +50,6 @@ fun AlertDialog(
             }
         )
     }
-
 }
+
 
