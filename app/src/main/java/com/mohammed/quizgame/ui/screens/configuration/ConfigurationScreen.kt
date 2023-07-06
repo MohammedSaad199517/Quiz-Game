@@ -2,6 +2,7 @@ package com.mohammed.quizgame.ui.screens.configuration
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -41,14 +42,12 @@ fun ConfigurationScreen(
         navController = navController,
         navigateToGameScreen = viewModel::navigateToGameScreen,
         saveConfig = viewModel::saveConfig,
-        selectedCategory = uiState.selectedCategory,
-        selectedLevel = uiState.selectedLevel,
-        selectedQuantity = uiState.selectedQuantity,
         numberOfAvailableQuestion = uiState.numberOfAvailableQuestion,
         updateNumberOfAvailableQuestion = viewModel::updateNumberOfAvailableQuestion,
         openAlertDialogIfRequireNumberOfQuestionIsNotAvailable = viewModel::openAlertDialogIfRequireNumberOfQuestionIsNotAvailable,
         isAlertDialogOpen = uiState.isAlertDialogOpen,
-        closeAlertDialog = viewModel::closeAlertDialog
+        closeAlertDialog = viewModel::closeAlertDialog,
+        textMessage = viewModel::textMessage
     )
 }
 
@@ -62,17 +61,18 @@ private fun ConfigurationContent(
     navController: NavController,
     navigateToGameScreen: (navController: NavController) -> Unit,
     saveConfig: (selectedCategory: String?, selectedLevel: String?, selectedQuantity: Int?) -> Unit,
-    selectedCategory: String?,
-    selectedLevel: String?,
-    selectedQuantity: Int?,
     numberOfAvailableQuestion: Int,
     updateNumberOfAvailableQuestion: () -> Unit,
     openAlertDialogIfRequireNumberOfQuestionIsNotAvailable: () -> Unit,
     isAlertDialogOpen: Boolean,
-    closeAlertDialog: () -> Unit
+    closeAlertDialog: () -> Unit,
+    textMessage: (numberOfAvailableQuestion: Int) -> String
+
 ) {
     Column(
-        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
     ) {
         Spacer(modifier = Modifier.height(32.dp))
         TextSelect(text = stringResource(R.string.select_question_category))
@@ -81,27 +81,37 @@ private fun ConfigurationContent(
         DropdownCategoryMenuBox(
             options = categories,
             updateSelectedCategory = updateSelectedCategory,
-            isLoading = isLoading
+            isLoading = isLoading,
+            saveConfig = saveConfig
 
         )
         Spacer(modifier = Modifier.height(32.dp))
         TextSelect(text = stringResource(R.string.select_difficult_level))
         Spacer(modifier = Modifier.height(8.dp))
-        RadioButtons(updateSelectedLevel)
+        RadioButtons(updateSelectedLevel, saveConfig)
         Spacer(modifier = Modifier.height(32.dp))
-        TextSelect(text = stringResource(R.string.select_question_quantity))
+        Row(
 
-        DropdownQuestionQuantityMenu(updateSelectedQuantity)
+        ) {
+            TextSelect(text = stringResource(R.string.select_question_quantity))
+            DropdownQuestionQuantityMenu(
+                updateSelectedQuantity = updateSelectedQuantity,
+                saveConfig = saveConfig,
+
+                )
+        }
+
         Spacer(modifier = Modifier.height(32.dp))
         StartButton(
-            modifier=Modifier.fillMaxWidth().padding(16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .height(56.dp),
             navController = navController,
             navigateToGameScreen = navigateToGameScreen,
-            saveConfig = saveConfig,
-            selectedCategory = selectedCategory,
-            selectedLevel = selectedLevel,
-            selectedQuantity = selectedQuantity,
-            openAlertDialogIfRequireNumberOfQuestionIsNotAvailable = openAlertDialogIfRequireNumberOfQuestionIsNotAvailable
+            openAlertDialogIfRequireNumberOfQuestionIsNotAvailable = openAlertDialogIfRequireNumberOfQuestionIsNotAvailable,
+            updateNumberOfAvailableQuestion = updateNumberOfAvailableQuestion,
+            isLoading = isLoading
 
         )
 
@@ -110,10 +120,9 @@ private fun ConfigurationContent(
             navController = navController,
             numberOfAvailableQuestion = numberOfAvailableQuestion,
             saveConfig = saveConfig,
-            updateNumberOfAvailableQuestion = updateNumberOfAvailableQuestion,
-            closeAlertDialog = closeAlertDialog
+            closeAlertDialog = closeAlertDialog,
+            textMessage = textMessage
         )
     }
 }
-
 
