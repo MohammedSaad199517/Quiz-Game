@@ -124,6 +124,6 @@ class ConfigurationViewModel @Inject constructor(
     }
 
     private companion object {
-        const val noQuestionsFounded = "there is no questions in this level of category  "
+        const val noQuestionsFounded = "Sorry, there is no questions in this level of category  please choose another  "
     }
 }

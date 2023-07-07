@@ -1,6 +1,9 @@
 package com.mohammed.quizgame.ui.screens.game
 
+import com.mohammed.quizgame.domain.models.Game
+
 data class GameUISate(
+    val quiz: List<Game> = emptyList(),
     val question: String = "",
     val time: Long = 0L,
     val totalQuestions: Int = 0,
