@@ -10,8 +10,8 @@ class GetQuizUseCase @Inject constructor(
     private val getSavedConfigurationUseCase: GetSavedConfigurationUseCase
 ) {
     suspend operator fun invoke(): List<Game> {
-        val levelSelected = getSavedConfigurationUseCase.invoke()?.selectedLevel!!
-        val categorySelected = getSavedConfigurationUseCase.invoke()?.selectedCategory!!
+        val levelSelected = getSavedConfigurationUseCase.invoke().selectedLevel!!
+        val categorySelected = getSavedConfigurationUseCase.invoke().selectedCategory!!
         return quizRepository.getAllCachedQuestions()
             .map { it.toGame() }
             .filter {

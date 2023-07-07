@@ -12,7 +12,7 @@ import com.mohammed.quizgame.ui.theme.MainColor
 fun PlayAgainButton(navController: NavController) {
     Button(
         onClick = {
-            navController.navigate(Screen.ConfigurationScreen.route)
+            navController.popBackStack(Screen.ConfigurationScreen.route,false)
         },
         colors = ButtonDefaults.buttonColors(MainColor),
 
