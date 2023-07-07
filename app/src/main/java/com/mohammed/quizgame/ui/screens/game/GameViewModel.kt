@@ -30,11 +30,13 @@ class GameViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
+            val quiz= getQuizUseCase.invoke()
             _uiState.update {
                 it.copy(
+                    quiz=quiz,
                     totalQuestions = getSavedConfigurationUseCase.invoke().selectedQuantity!!,
-                    question = getQuizUseCase.invoke().first().question,
-                    answers = getQuizUseCase.invoke().first().answers,
+                    question = quiz.first().question,
+                    answers = quiz.first().answers,
                 )
             }
         }
@@ -68,8 +70,8 @@ class GameViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     currentQuestionNumber = currentQuestionNumber + 1,
-                    question = getQuizUseCase.invoke()[currentQuestionNumber].question,
-                    answers = getQuizUseCase.invoke()[currentQuestionNumber].answers,
+                    question = _uiState.value.quiz[currentQuestionNumber].question,
+                    answers = _uiState.value.quiz[currentQuestionNumber].answers,
                     isAnswerCorrect = null,
                     answerSelectedId = null,
                     isAnswerSelected = false
