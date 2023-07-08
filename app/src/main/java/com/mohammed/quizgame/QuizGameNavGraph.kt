@@ -13,7 +13,7 @@ import com.mohammed.quizgame.ui.screens.winner.winnerRoute
 @Composable
 fun QuizGameNavGraph (navController: NavHostController){
 
-    NavHost(navController = navController, startDestination = Screen.ConfigurationScreen.route) {
+    NavHost(navController = navController, startDestination = Screen.SplashScreen.route) {
 
         configurationRoute(navController)
         gameRoute(navController)
